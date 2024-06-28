@@ -2,10 +2,9 @@
 # rocstr
 <!-- cargo-sync-rdme ]] -->
 <!-- cargo-sync-rdme badge [[ -->
-[![License: MIT OR Apache-2.0](https://img.shields.io/crates/l/rocstr.svg?style=for-the-badge)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 [![crates.io](https://img.shields.io/crates/v/rocstr.svg?logo=rust&style=for-the-badge)](https://crates.io/crates/rocstr)
 [![docs.rs](https://img.shields.io/docsrs/rocstr.svg?logo=docs.rs&style=for-the-badge)](https://docs.rs/rocstr)
-[![Rust: ^1.60](https://img.shields.io/badge/rust-^1.60-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
+[![Rust: ^1.51](https://img.shields.io/badge/rust-^1.51-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
 [![Codecov](https://img.shields.io/codecov/c/github/OuiCloud/rocstr.svg?label=codecov&logo=codecov&style=for-the-badge)](https://codecov.io/gh/OuiCloud/rocstr)
 <!-- cargo-sync-rdme ]] -->
 <!-- cargo-sync-rdme rustdoc [[ -->
@@ -65,6 +64,7 @@ More over, it was designed to cover web full stack programming range, from full 
 |-------|:---:|:-------:|:--------:|:----:|:-------:|----|
 |core::str|❌|❌|❌|✅|➖|core immutable string|
 |std::String|✅|❌|❌|❌|➖|std string|
+|imstr::ImString|✅|❌|❌|❌|❌|use Arc<String> under the hood|
 |smol_str::SmolStr|✅|❌|❌|✅|❌|rust-analyzer string|
 |bytestring::ByteString|✅|❌|❌|✅|❌|actix string|
 |flexstr::FlexStr|✅|❌|❌|✅|❌||
@@ -84,9 +84,9 @@ The target use case is web full stack programming :
 
 ### Supported Rust Versions
 
-The RocStr relies on Simple Const Generics introduced in Rust 1.51.0.
+The RocStr relies on Simple Const Generics introduced in Rust 1.51.
 
-The current MSRV is 1.51.0.
+The current MSRV is 1.51.
 
 ### Safety
 
