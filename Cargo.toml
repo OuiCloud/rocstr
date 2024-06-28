@@ -1,14 +1,19 @@
 [package]
-name         = "rocstr"
-version      = "0.5.1"
-edition      = "2018"
-rust-version = "1.51"
-description  = "An immutable fixed capacity stack based generic copy string"
-license      = "MIT OR Apache-2.0"
-repository   = "https://github.com/OuiCloud/rocstr"
-authors      = ["Philipe Menuet Tang <philippe@ouicloud.software>"]
-keywords     = ["string", "immutable", "stack", "no_std"]
-categories   = ["data-structures", "no-std"]
+name          = "rocstr"
+version       = "0.5.1"
+edition       = "2018"
+rust-version  = "1.51"
+description   = "An immutable fixed capacity stack based generic copy string"
+license       = "MIT OR Apache-2.0"
+repository    = "https://github.com/OuiCloud/rocstr"
+homepage      = "https://github.com/OuiCloud/rocstr"
+documentation = "https://docs.rs/rocstr"
+readme        = "README.md"
+authors       = ["Philipe Menuet Tang <philippe@ouicloud.software>"]
+keywords      = ["string", "immutable", "stack", "no_std"]
+categories    = ["data-structures", "no-std"]
+
+exclude = [".vscode/*", ".github/*"]
 
 [package.metadata.cargo-sync-rdme.badge]
 style = "for-the-badge"
