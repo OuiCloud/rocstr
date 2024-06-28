@@ -44,8 +44,12 @@ impl Default for InsufficientCapacity<57> {
     }
 }
 
-#[cfg(std)]
-impl<const SIZE: usize> std::error::Error for InsufficientCapacity<SIZE> {}
+#[cfg(feature = "std")]
+pub mod std {
+    extern crate std;
+    use super::*;
+    impl<const SIZE: usize> std::error::Error for InsufficientCapacity<SIZE> {}
+}
 
 #[cfg(test)]
 mod tests {
