@@ -14,7 +14,7 @@ categories   = ["data-structures", "no-std"]
 style = "for-the-badge"
 
 [package.metadata.cargo-sync-rdme.badge.badges]
-license      = { link = "#LICENCE_APACHE" }
+license      = { link = "https://www.apache.org/licenses/LICENSE-2.0.txt" }
 crates-io    = true
 docs-rs      = true
 rust-version = true
