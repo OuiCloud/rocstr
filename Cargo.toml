@@ -5,7 +5,6 @@ edition      = "2021"
 rust-version = "1.60"
 description  = "An immutable fixed capacity stack based generic copy string"
 license      = "MIT OR Apache-2.0"
-license-file = "https://www.apache.org/licenses/LICENSE-2.0.html"
 repository   = "https://github.com/OuiCloud/rocstr"
 authors      = ["Philipe Menuet Tang <philippe@ouicloud.software>"]
 keywords     = ["string", "immutable", "stack", "no_std"]
@@ -15,7 +14,7 @@ categories   = ["data-structures", "no-std"]
 style = "for-the-badge"
 
 [package.metadata.cargo-sync-rdme.badge.badges]
-license      = true
+license      = { link = "#LICENCE_APACHE" }
 crates-io    = true
 docs-rs      = true
 rust-version = true

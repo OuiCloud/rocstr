@@ -2,7 +2,7 @@
 # rocstr
 <!-- cargo-sync-rdme ]] -->
 <!-- cargo-sync-rdme badge [[ -->
-[![License: MIT OR Apache-2.0](https://img.shields.io/crates/l/rocstr.svg?style=for-the-badge)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![License: MIT OR Apache-2.0](https://img.shields.io/crates/l/rocstr.svg?style=for-the-badge)](#LICENCE_APACHE)
 [![crates.io](https://img.shields.io/crates/v/rocstr.svg?logo=rust&style=for-the-badge)](https://crates.io/crates/rocstr)
 [![docs.rs](https://img.shields.io/docsrs/rocstr.svg?logo=docs.rs&style=for-the-badge)](https://docs.rs/rocstr)
 [![Rust: ^1.60](https://img.shields.io/badge/rust-^1.60-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
