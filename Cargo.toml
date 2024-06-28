@@ -1,36 +1,48 @@
 [package]
-name        = "rocstr"
-version     = "0.3.0"
-edition     = "2021"
-description = "An immutable fixed capacity stack based generic copy string"
-license     = "MIT OR Apache-2.0"
-repository  = "https://github.com/OuiCloud/rocstr"
-authors     = ["Philipe Menuet Tang <philippe@ouicloud.software>"]
-keywords    = ["string", "immutable", "stack", "no_std"]
-categories  = ["data-structures", "no-std"]
+name         = "rocstr"
+version      = "0.5.1"
+edition      = "2021"
+rust-version = "1.60"
+description  = "An immutable fixed capacity stack based generic copy string"
+license      = "MIT OR Apache-2.0"
+license-file = "https://www.apache.org/licenses/LICENSE-2.0.html"
+repository   = "https://github.com/OuiCloud/rocstr"
+authors      = ["Philipe Menuet Tang <philippe@ouicloud.software>"]
+keywords     = ["string", "immutable", "stack", "no_std"]
+categories   = ["data-structures", "no-std"]
+
+[package.metadata.cargo-sync-rdme.badge]
+style = "for-the-badge"
+
+[package.metadata.cargo-sync-rdme.badge.badges]
+license      = true
+crates-io    = true
+docs-rs      = true
+rust-version = true
+codecov      = true
+
+[badges]
+maintenance = { status = "actively-developed" }
 
 [dependencies]
-itoa           = { version = "1.0", optional = false, default_features = false }
+bytes          = { version = "1.6", optional = true, default-features = false }
 postgres-types = { version = "0.2", optional = true, default_features = false }
 serde          = { version = "1.0", optional = true, default_features = false }
 
 [dev-dependencies]
 arrayvec         = { version = "0.7" }
-beul             = { version = "1.0" }
-criterion        = { version = "0.5" }
-fake             = { version = "2.5" }
+criterion        = { version = "0.5", features = ["html_reports"] }
+imstr            = { version = "0.2" }
 inlinable_string = { version = "0.1" }
-log              = { version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
-proptest         = { version = "1.1" }
-rand             = { version = "0.8" }
 serde            = { version = "1.0", features = ["derive"] }
 serde_json       = { version = "1.0" }
-serde_qs         = { version = "0.13" }
-smallstring      = { version = "0.1" }
 smol_str         = { version = "0.2" }
-toml             = { version = "0.8" }
 
 [features]
 default  = ["std"]
 std      = ["serde?/std"]
-postgres = ["std", "dep:postgres-types"]
+postgres = ["std", "dep:postgres-types", "dep:bytes"]
+
+[[bench]]
+name    = "strings"
+harness = false
