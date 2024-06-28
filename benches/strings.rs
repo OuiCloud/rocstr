@@ -115,54 +115,56 @@ impl Name for InlineString {
         "InlineString"
     }
 }
+
 impl Name for InlinableString {
     #[inline]
     fn name() -> &'static str {
         "InlinableString"
     }
 }
-impl Name for SmallString {
-    #[inline]
-    fn name() -> &'static str {
-        "SmallString"
-    }
-}
+
 impl Name for ArrayString<8> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for ArrayString<16> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for ArrayString<32> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for ArrayString<64> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for ArrayString<128> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for ArrayString<256> {
     #[inline]
     fn name() -> &'static str {
         "ArrayString"
     }
 }
+
 impl Name for SmolStr {
     #[inline]
     fn name() -> &'static str {
@@ -176,30 +178,35 @@ impl Name for RocStr<8> {
         "RocStr"
     }
 }
+
 impl Name for RocStr<16> {
     #[inline]
     fn name() -> &'static str {
         "RocStr"
     }
 }
+
 impl Name for RocStr<32> {
     #[inline]
     fn name() -> &'static str {
         "RocStr"
     }
 }
+
 impl Name for RocStr<64> {
     #[inline]
     fn name() -> &'static str {
         "RocStr"
     }
 }
+
 impl Name for RocStr<128> {
     #[inline]
     fn name() -> &'static str {
         "RocStr"
     }
 }
+
 impl Name for RocStr<256> {
     #[inline]
     fn name() -> &'static str {
@@ -217,42 +224,42 @@ impl EqStr for String {
         self == rhs
     }
 }
+
 impl EqStr for ImString {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
         self == rhs
     }
 }
+
 impl EqStr for InlineString {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
         self == rhs
     }
 }
+
 impl EqStr for InlinableString {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
         self == rhs
     }
 }
-impl EqStr for SmallString {
-    #[inline]
-    fn eq(&self, rhs: &str) -> bool {
-        &rhs == self
-    }
-}
+
 impl EqStr for SmolStr {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
         self == rhs
     }
 }
+
 impl<const SIZE: usize> EqStr for ArrayString<SIZE> {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
         self == rhs
     }
 }
+
 impl<const SIZE: usize> EqStr for RocStr<SIZE> {
     #[inline]
     fn eq(&self, rhs: &str) -> bool {
