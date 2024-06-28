@@ -234,11 +234,7 @@ where
         let rhs = rhs.as_ref();
         let mut inner = self.inner;
         let (slice, len) = if self.len + rhs.len() > SIZE {
-            let available_len = if SIZE > self.len {
-                SIZE - self.len
-            } else {
-                self.len - SIZE
-            };
+            let available_len = SIZE - self.len;
             let slice = extract_utf8_within(rhs.as_bytes(), available_len);
             (slice, SIZE)
         } else {
@@ -259,11 +255,7 @@ impl<const SIZE: usize, const LEN: usize> Add<RocStr<LEN>> for RocStr<SIZE> {
     fn add(self, rhs: RocStr<LEN>) -> Self::Output {
         let mut inner = self.inner;
         let (slice, len) = if self.len + rhs.len > SIZE {
-            let available_len = if SIZE > self.len {
-                SIZE - self.len
-            } else {
-                self.len - SIZE
-            };
+            let available_len = SIZE - self.len;
             let slice = extract_utf8_within(&rhs.inner, available_len);
             (slice, SIZE)
         } else {
@@ -747,6 +739,18 @@ mod tests {
     }
 
     #[test]
+    fn rocstr_should_equal_inner_str() {
+        let s = RocStr::<16>::from("foo");
+        assert_eq!(s, "foo");
+    }
+
+    #[test]
+    fn rocstr_ref_should_equal_inner_str() {
+        let s = RocStr::<16>::from("foo");
+        assert_eq!(&s, "foo");
+    }
+
+    #[test]
     fn rocstr_capacity_should_be_its_generic_parameter_size() {
         let string = RocStr::<16>::from("");
         assert_eq!(string.capacity(), 16);
@@ -812,6 +816,12 @@ mod tests {
 
     #[test]
     fn concat_a_str_to_rocstr_first_without_enough_capacity_should_be_trimmed_concateenation() {
+        let s = RocStr::<16>::from("Löwe 老虎 ");
+        let t = "Léo";
+        let expected = RocStr::<16>::from("Löwe 老虎 Lé");
+
+        assert_eq!(s + t, expected);
+
         let s = RocStr::<16>::from("Löwe 老虎 ");
         let t = "Léopard Gepardi";
         let expected = RocStr::<16>::from("Löwe 老虎 Lé");
