@@ -19,7 +19,7 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Run code coverage
-      run: cargo tarpaulin --verbose
+      run: cargo tarpaulin --all-features --exclude-files benches/* --verbose -o Xml
     - name: Archive code coverage results
       uses: actions/upload-artifact@v4.3.3
       with:
