@@ -234,9 +234,13 @@ where
         let rhs = rhs.as_ref();
         let mut inner = self.inner;
         let (slice, len) = if self.len + rhs.len() > SIZE {
-            let len = SIZE;
-            let slice = extract_utf8_within(rhs.as_bytes(), SIZE.abs_diff(self.len));
-            (slice, len)
+            let available_len = if SIZE > self.len {
+                SIZE - self.len
+            } else {
+                self.len - SIZE
+            };
+            let slice = extract_utf8_within(rhs.as_bytes(), available_len);
+            (slice, SIZE)
         } else {
             let len = self.len + rhs.len();
             let slice = rhs.as_bytes();
@@ -255,9 +259,13 @@ impl<const SIZE: usize, const LEN: usize> Add<RocStr<LEN>> for RocStr<SIZE> {
     fn add(self, rhs: RocStr<LEN>) -> Self::Output {
         let mut inner = self.inner;
         let (slice, len) = if self.len + rhs.len > SIZE {
-            let len = SIZE;
-            let slice = extract_utf8_within(&rhs.inner, SIZE.abs_diff(self.len));
-            (slice, len)
+            let available_len = if SIZE > self.len {
+                SIZE - self.len
+            } else {
+                self.len - SIZE
+            };
+            let slice = extract_utf8_within(&rhs.inner, available_len);
+            (slice, SIZE)
         } else {
             let len = self.len + rhs.len;
             let slice = &rhs.inner[..rhs.len];

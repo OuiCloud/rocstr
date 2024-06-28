@@ -1,8 +1,8 @@
 [package]
 name         = "rocstr"
 version      = "0.5.1"
-edition      = "2021"
-rust-version = "1.60"
+edition      = "2018"
+rust-version = "1.51"
 description  = "An immutable fixed capacity stack based generic copy string"
 license      = "MIT OR Apache-2.0"
 repository   = "https://github.com/OuiCloud/rocstr"
@@ -14,7 +14,6 @@ categories   = ["data-structures", "no-std"]
 style = "for-the-badge"
 
 [package.metadata.cargo-sync-rdme.badge.badges]
-license      = { link = "https://www.apache.org/licenses/LICENSE-2.0.txt" }
 crates-io    = true
 docs-rs      = true
 rust-version = true

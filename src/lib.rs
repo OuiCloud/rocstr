@@ -53,17 +53,18 @@
 //!
 //! | Library                  | owned | impl Copy | immut. API | no std | no unsafe | Note                          |
 //! |--------------------------|:-----:|:---------:|:----------:|:------:|:---------:|-------------------------------|
-//! | core::str                | ❌    | ❌         | ❌         | ✅     | ➖        | core immutable string         |
-//! | std::String              | ✅    | ❌         | ❌         | ❌     | ➖        | std string                    |
-//! | smol_str::SmolStr        | ✅    | ❌         | ❌         | ✅     | ❌        | rust-analyzer string          |
-//! | bytestring::ByteString   | ✅    | ❌         | ❌         | ✅     | ❌        | actix string                  |
-//! | flexstr::FlexStr         | ✅    | ❌         | ❌         | ✅     | ❌        |                               |
-//! | copstr::Str              | ✅    | ✅         | ❌         | ❌     | ❌        |                               |
-//! | copystr::sXX             | ✅    | ✅         | ❌         | ❌     | ✅        | old impl before const generic |
-//! | arraystring::ArrayString | ✅    | ✅         | ❌         | ✅     | ❌        | old impl before const generic |
-//! | tinystr::TinyAsciiStr    | ✅    | ✅         | ❌         | ✅     | ❌        | ascii only                    |
-//! | arrayvec::ArrayString    | ✅    | ✅         | ❌         | ✅     | ❌        | unfortunately, it uses unsafe |
-//! | rocstr::RocStr           | ✅    | ✅         | ✅         | ✅     | ✅        | this crate                    |
+//! | core::str                | ❌    | ❌         | ❌         | ✅     | ➖        | core immutable string          |
+//! | std::String              | ✅    | ❌         | ❌         | ❌     | ➖        | std string                     |
+//! | imstr::ImString          | ✅    | ❌         | ❌         | ❌     | ❌        | use Arc<String> under the hood |
+//! | smol_str::SmolStr        | ✅    | ❌         | ❌         | ✅     | ❌        | rust-analyzer string           |
+//! | bytestring::ByteString   | ✅    | ❌         | ❌         | ✅     | ❌        | actix string                   |
+//! | flexstr::FlexStr         | ✅    | ❌         | ❌         | ✅     | ❌        |                                |
+//! | copstr::Str              | ✅    | ✅         | ❌         | ❌     | ❌        |                                |
+//! | copystr::sXX             | ✅    | ✅         | ❌         | ❌     | ✅        | old impl before const generic  |
+//! | arraystring::ArrayString | ✅    | ✅         | ❌         | ✅     | ❌        | old impl before const generic  |
+//! | tinystr::TinyAsciiStr    | ✅    | ✅         | ❌         | ✅     | ❌        | ascii only                     |
+//! | arrayvec::ArrayString    | ✅    | ✅         | ❌         | ✅     | ❌        | unfortunately, it uses unsafe  |
+//! | rocstr::RocStr           | ✅    | ✅         | ✅         | ✅     | ✅        | this crate                     |
 //!
 //! ## Use cases
 //!
@@ -73,9 +74,9 @@
 //!
 //! ## Supported Rust Versions
 //!
-//! The RocStr relies on Simple Const Generics introduced in Rust 1.51.0.
+//! The RocStr relies on Simple Const Generics introduced in Rust 1.51.
 //!
-//! The current MSRV is 1.51.0.
+//! The current MSRV is 1.51.
 //!
 //! ## Safety
 //!
