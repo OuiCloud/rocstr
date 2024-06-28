@@ -14,10 +14,11 @@ categories   = ["data-structures", "no-std"]
 style = "for-the-badge"
 
 [package.metadata.cargo-sync-rdme.badge.badges]
-crates-io    = true
-docs-rs      = true
-rust-version = true
-codecov      = true
+crates-io      = true
+docs-rs        = true
+rust-version   = true
+codecov        = true
+github-actions = { workflows = ["tests.yml"] }
 
 [badges]
 maintenance = { status = "actively-developed" }

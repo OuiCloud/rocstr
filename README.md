@@ -6,6 +6,7 @@
 [![docs.rs](https://img.shields.io/docsrs/rocstr.svg?logo=docs.rs&style=for-the-badge)](https://docs.rs/rocstr)
 [![Rust: ^1.51](https://img.shields.io/badge/rust-^1.51-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
 [![Codecov](https://img.shields.io/codecov/c/github/OuiCloud/rocstr.svg?label=codecov&logo=codecov&style=for-the-badge)](https://codecov.io/gh/OuiCloud/rocstr)
+[![GitHub Actions: Unit Tests](https://img.shields.io/github/actions/workflow/status/OuiCloud/rocstr/tests.yml.svg?label=Unit+Tests&logo=github&style=for-the-badge)](https://github.com/OuiCloud/rocstr/actions/workflows/tests.yml)
 <!-- cargo-sync-rdme ]] -->
 <!-- cargo-sync-rdme rustdoc [[ -->
 ## RocStr
@@ -64,7 +65,7 @@ More over, it was designed to cover web full stack programming range, from full 
 |-------|:---:|:-------:|:--------:|:----:|:-------:|----|
 |core::str|❌|❌|❌|✅|➖|core immutable string|
 |std::String|✅|❌|❌|❌|➖|std string|
-|imstr::ImString|✅|❌|❌|❌|❌|use Arc<String> under the hood|
+|imstr::ImString|✅|❌|❌|❌|❌|use `Arc<String>` under the hood|
 |smol_str::SmolStr|✅|❌|❌|✅|❌|rust-analyzer string|
 |bytestring::ByteString|✅|❌|❌|✅|❌|actix string|
 |flexstr::FlexStr|✅|❌|❌|✅|❌||
