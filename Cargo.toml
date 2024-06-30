@@ -23,8 +23,8 @@ maintenance    = true
 rust-version   = true
 crates-io      = true
 docs-rs        = true
+github-actions = { workflows = [{ file = "audit.yml", name = "Security Audit" }, { file = "tests.yml", name = "Unit Tests" }] }
 codecov        = true
-github-actions = { workflows = ["tests.yml"] }
 
 [badges]
 maintenance = { status = "actively-developed" }
