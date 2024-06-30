@@ -44,9 +44,9 @@ serde_json       = { version = "1.0" }
 smol_str         = { version = "0.2" }
 
 [features]
-default  = ["std"]
-std      = ["serde?/std"]
-postgres = ["std", "dep:postgres-types", "dep:bytes"]
+default  = []
+std      = []
+postgres = ["postgres-types", "bytes"]
 
 [[bench]]
 name    = "strings"
