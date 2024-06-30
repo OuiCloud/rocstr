@@ -19,9 +19,10 @@ exclude = [".vscode/*", ".github/*"]
 style = "for-the-badge"
 
 [package.metadata.cargo-sync-rdme.badge.badges]
+maintenance    = true
+rust-version   = true
 crates-io      = true
 docs-rs        = true
-rust-version   = true
 codecov        = true
 github-actions = { workflows = ["tests.yml"] }
 
