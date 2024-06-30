@@ -1,8 +1,8 @@
 [package]
 name          = "rocstr"
 version       = "0.5.1"
-edition       = "2018"
-rust-version  = "1.51"
+edition       = "2021"
+rust-version  = "1.60"
 description   = "An immutable fixed capacity stack based generic copy string"
 license       = "MIT OR Apache-2.0"
 repository    = "https://github.com/OuiCloud/rocstr"
