@@ -105,8 +105,6 @@
 pub mod rocerr;
 pub mod rocstr;
 
-mod strings;
-
 #[cfg(feature = "postgres")]
 pub mod postgres;
 
