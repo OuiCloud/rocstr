@@ -3,7 +3,7 @@
 <!-- cargo-sync-rdme ]] -->
 <!-- cargo-sync-rdme badge [[ -->
 [![Maintenance: actively-developed](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg?style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-badges-section)
-[![Rust: ^1.51](https://img.shields.io/badge/rust-^1.51-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
+[![Rust: ^1.60](https://img.shields.io/badge/rust-^1.60-93450a.svg?logo=rust&style=for-the-badge)](https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field)
 [![crates.io](https://img.shields.io/crates/v/rocstr.svg?logo=rust&style=for-the-badge)](https://crates.io/crates/rocstr)
 [![docs.rs](https://img.shields.io/docsrs/rocstr.svg?logo=docs.rs&style=for-the-badge)](https://docs.rs/rocstr)
 [![GitHub Actions: Security Audit](https://img.shields.io/github/actions/workflow/status/OuiCloud/rocstr/audit.yml.svg?label=Security+Audit&logo=github&style=for-the-badge)](https://github.com/OuiCloud/rocstr/actions/workflows/audit.yml)
@@ -87,9 +87,7 @@ The target use case is web full stack programming :
 
 ### Supported Rust Versions
 
-The RocStr relies on Simple Const Generics introduced in Rust 1.51.
-
-The current MSRV is 1.51.
+The current MSRV is 1.60.
 
 ### Safety
 
