@@ -1,5 +1,5 @@
 //! Serde Serialize and Deserialize implementation
-//!
+
 use serde::Deserialize;
 use serde::Serialize;
 

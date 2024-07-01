@@ -74,9 +74,7 @@
 //!
 //! ## Supported Rust Versions
 //!
-//! The RocStr relies on Simple Const Generics introduced in Rust 1.51.
-//!
-//! The current MSRV is 1.51.
+//! The current MSRV is 1.60.
 //!
 //! ## Safety
 //!
@@ -104,8 +102,6 @@
 
 pub mod rocerr;
 pub mod rocstr;
-
-mod strings;
 
 #[cfg(feature = "postgres")]
 pub mod postgres;

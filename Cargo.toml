@@ -1,8 +1,8 @@
 [package]
 name          = "rocstr"
 version       = "0.5.1"
-edition       = "2018"
-rust-version  = "1.51"
+edition       = "2021"
+rust-version  = "1.60"
 description   = "An immutable fixed capacity stack based generic copy string"
 license       = "MIT OR Apache-2.0"
 repository    = "https://github.com/OuiCloud/rocstr"
@@ -44,9 +44,9 @@ serde_json       = { version = "1.0" }
 smol_str         = { version = "0.2" }
 
 [features]
-default  = ["std"]
-std      = ["serde?/std"]
-postgres = ["std", "dep:postgres-types", "dep:bytes"]
+default  = []
+std      = []
+postgres = ["postgres-types", "bytes"]
 
 [[bench]]
 name    = "strings"
