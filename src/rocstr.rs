@@ -125,6 +125,23 @@ impl<const SIZE: usize> RocStr<SIZE> {
 
         RocStr { inner, len }
     }
+
+    /// Returns `true` if the given `&str` matches a prefix of this RocStr.
+    ///
+    /// Returns `false` if it does not.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use rocstr::RocStr;
+    /// let bananas = RocStr::<16>::from("bananas");
+    ///
+    /// assert!(bananas.starts_with("bana"));
+    /// assert!(!bananas.starts_with("nana"));
+    /// ```
+    pub fn starts_with(&self, pattern: &str) -> bool {
+        self.as_bytes().starts_with(pattern.as_bytes())
+    }
 }
 
 impl<const SIZE: usize> Debug for RocStr<SIZE> {
@@ -793,9 +810,28 @@ mod tests {
     }
 
     #[test]
+    fn rocstr_starts_with_should_return_true_if_it_starts_with() {
+        let bananas = RocStr::<16>::from("bananas");
+        assert!(bananas.starts_with("bana"));
+    }
+
+    #[test]
+    fn rocstr_starts_with_should_return_false_if_it_does_not_start_with() {
+        let bananas = RocStr::<16>::from("bananas");
+        assert!(!bananas.starts_with("nana"));
+    }
+
+    #[test]
     fn bytes_from_rocstr_should_be_the_bytes_of_the_inner_str() {
         let s = RocStr::<16>::from("foo");
         let bytes: &[u8] = (&s).into();
+        assert_eq!(bytes, b"foo");
+    }
+
+    #[test]
+    fn rocstr_as_bytes_should_be_the_bytes_of_the_inner_str() {
+        let s = RocStr::<16>::from("foo");
+        let bytes = s.as_bytes();
         assert_eq!(bytes, b"foo");
     }
 
