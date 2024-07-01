@@ -20,6 +20,18 @@ pub struct RocStr<const SIZE: usize> {
 }
 
 impl<const SIZE: usize> RocStr<SIZE> {
+    /// Extracts a slice of bytes containing the entire [`RocStr`].
+    ///
+    /// # Examples
+    /// ```
+    /// # use rocstr::RocStr;
+    /// let s = RocStr::<3>::from("foo");
+    /// assert_eq!(b"foo", s.as_bytes());
+    /// ```
+    pub fn as_bytes(&self) -> &[u8] {
+        self.into()
+    }
+
     /// Extracts a string slice containing the entire [`RocStr`].
     ///
     /// # Examples
