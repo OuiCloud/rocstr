@@ -104,9 +104,11 @@ pub mod rocerr;
 pub mod rocstr;
 
 #[cfg(feature = "postgres")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "postgres")))]
 pub mod postgres;
 
 #[cfg(feature = "serde")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "serde")))]
 pub mod serialize;
 
 pub use crate::rocerr::InsufficientCapacity;
