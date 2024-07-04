@@ -101,6 +101,101 @@ impl<const SIZE: usize> RocStr<SIZE> {
         self.len
     }
 
+    /// Replaces all matches of a pattern with another string.
+    ///
+    /// `replace` creates a new [`RocStr`], and copies the data from this [`RocStr`] into it.
+    /// While doing so, it attempts to find matches of a pattern.
+    /// If it finds any, it replaces them with the replacement string.
+    ///
+    /// If replacing with the replacement string make this [`RocStr`] overflow its capacity,
+    /// the string will be trim to at most the capacity.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// # use rocstr::RocStr;
+    ///
+    /// let s = RocStr::<16>::from("this is old");
+    ///
+    /// assert_eq!(RocStr::<16>::from("this is new"), s.replace("old", "new"));
+    /// assert_eq!(RocStr::<16>::from("than an old"), s.replace("is", "an"));
+    /// ```
+    ///
+    /// When the pattern doesn't match, it returns this [`RocStr`]:
+    ///
+    /// ```
+    /// let s = "this is old";
+    /// assert_eq!(s, s.replace("cookie monster", "little lamb"));
+    /// ```
+    pub fn replace(&self, from: &str, to: &str) -> Self {
+        if from.is_empty() {
+            *self
+        } else {
+            let inner_len = self.len;
+            let from_len = from.len();
+            let to_len = to.len();
+            let to_as_bytes = to.as_bytes();
+            let pattern = from.as_bytes();
+            let mut inner = [b' '; SIZE];
+
+            let mut src_start = 0;
+            let mut src_end = 0;
+            let mut dst_start = 0;
+            let mut dst_end = 0;
+
+            for i in 0..=(inner_len - from_len) {
+                if &self.inner[i..i + from_len] == pattern {
+                    src_end = i;
+                    dst_end = dst_start + src_end - src_start;
+                    if dst_end <= SIZE {
+                        inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
+                        src_start = src_end;
+                        dst_start = dst_end;
+                    } else {
+                        src_end = src_start + SIZE - dst_start;
+                        dst_end = SIZE;
+                        inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
+                        break;
+                    }
+
+                    src_end = i + from_len;
+                    dst_end = dst_start + to_len;
+                    if dst_end <= SIZE {
+                        inner[src_start..src_end].copy_from_slice(to_as_bytes);
+                        src_start = src_end;
+                        dst_start = dst_end;
+                    } else {
+                        src_end = src_start + SIZE - dst_start;
+                        inner[src_start..src_end]
+                            .copy_from_slice(&to_as_bytes[0..SIZE - dst_start]);
+                        break;
+                    }
+                }
+            }
+
+            if dst_end <= SIZE {
+                src_end = self.len;
+                dst_end = dst_start + src_end - src_start;
+                if dst_end <= SIZE {
+                    inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
+                } else {
+                    src_end = src_start + SIZE - dst_start;
+                    dst_end = SIZE;
+                    inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
+                }
+            } else {
+                dst_end = SIZE;
+            }
+
+            Self {
+                inner,
+                len: dst_end,
+            }
+        }
+    }
+
     /// Returns a copy of this [`RocStr`] with capacity set to `LEN`.
     ///
     /// It will silently trim this [`RocStr`] if its length is greater than `LEN`.
@@ -141,6 +236,33 @@ impl<const SIZE: usize> RocStr<SIZE> {
     /// ```
     pub fn starts_with(&self, pattern: &str) -> bool {
         self.as_bytes().starts_with(pattern.as_bytes())
+    }
+
+    /// Returns a [`RocStr`] with a valid utf-8 string with at most `len` bytes.
+    ///
+    /// The source [`RocStr`] remains unchanged.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use rocstr::RocStr;
+    /// let s = RocStr::<32>::from("Löwe 老虎 Léopard");
+    ///
+    /// /* first byte of `ö` is not utf-8 boundary */
+    /// assert_eq!(s.truncate(2), "L");
+    ///
+    /// /* second byte of `老`is not utf-8 boundary */
+    /// assert_eq!(s.truncate(8), "Löwe ");
+    /// ```
+    #[inline]
+    #[must_use]
+    pub fn truncate(&self, len: usize) -> Self {
+        let slice = extract_utf8_within(self.as_bytes(), len);
+        let len = slice.len();
+        let mut inner = [b' '; SIZE];
+        inner[..len].copy_from_slice(slice);
+
+        Self { inner, len }
     }
 }
 
@@ -1184,5 +1306,38 @@ mod tests {
         let hash = hasher.finish();
 
         assert_eq!(hash, exptected);
+    }
+
+    #[test]
+    fn replace_an_str_at_the_begining_of_a_rocstr_should_be_the_rocstr_with_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        assert_eq!(RocStr::<16>::from("that is old"), s.replace("this", "that"));
+    }
+
+    #[test]
+    fn replace_an_str_in_a_rocstr_should_be_the_rocstr_with_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        assert_eq!(RocStr::<16>::from("than an old"), s.replace("is", "an"));
+    }
+
+    #[test]
+    fn replace_an_str_in_a_rocstr_that_overflow_should_be_the_truncated_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        let replaced = s.replace("old", "obvously overflowing");
+
+        assert!(
+            replaced.len <= replaced.capacity(),
+            "Len of replaced rocstr is greater than its capacity"
+        );
+
+        assert_eq!(RocStr::<16>::from("this is obvously"), replaced);
+    }
+
+    #[test]
+    fn truncate_rocstr_should_contain_a_valid_utf8_with_at_most_len_bytes() {
+        let s = RocStr::<32>::from("Löwe 老虎 Léopard");
+
+        /* second byte of `老`is not utf-8 boundary */
+        assert_eq!(s.truncate(8), "Löwe ");
     }
 }
