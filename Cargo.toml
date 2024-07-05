@@ -1,6 +1,6 @@
 [package]
 name          = "rocstr"
-version       = "0.5.1"
+version       = "0.6.0"
 edition       = "2021"
 rust-version  = "1.60"
 description   = "An immutable fixed capacity stack based generic copy string"
