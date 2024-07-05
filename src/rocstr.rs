@@ -133,66 +133,54 @@ impl<const SIZE: usize> RocStr<SIZE> {
         if from.is_empty() {
             *self
         } else {
-            let inner_len = self.len;
-            let from_len = from.len();
-            let to_len = to.len();
-            let to_as_bytes = to.as_bytes();
             let pattern = from.as_bytes();
+            let mut len = 0;
+            let mut skip = 0;
+
             let mut inner = [b' '; SIZE];
-
-            let mut src_start = 0;
-            let mut src_end = 0;
-            let mut dst_start = 0;
-            let mut dst_end = 0;
-
-            for i in 0..=(inner_len - from_len) {
-                if &self.inner[i..i + from_len] == pattern {
-                    src_end = i;
-                    dst_end = dst_start + src_end - src_start;
-                    if dst_end <= SIZE {
-                        inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
-                        src_start = src_end;
-                        dst_start = dst_end;
+            let frames = self.inner[..self.len].windows(from.len()).enumerate();
+            for (i, frame) in frames {
+                if skip == 0 {
+                    // Nothing to skip
+                    if frame == pattern {
+                        let end = len + to.len();
+                        if end <= SIZE {
+                            inner[len..end].copy_from_slice(to.as_bytes());
+                            len += to.len();
+                            // skip the from.len() bytes minus the one we are in
+                            skip = from.len() - 1;
+                        } else {
+                            let remaining_slots = SIZE - len;
+                            inner[len..SIZE].copy_from_slice(&to.as_bytes()[0..remaining_slots]);
+                            len = SIZE;
+                            break;
+                        }
+                    } else if len < SIZE {
+                        inner[len] = self.inner[i];
+                        len += 1;
                     } else {
-                        src_end = src_start + SIZE - dst_start;
-                        dst_end = SIZE;
-                        inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
                         break;
                     }
-
-                    src_end = i + from_len;
-                    dst_end = dst_start + to_len;
-                    if dst_end <= SIZE {
-                        inner[src_start..src_end].copy_from_slice(to_as_bytes);
-                        src_start = src_end;
-                        dst_start = dst_end;
-                    } else {
-                        src_end = src_start + SIZE - dst_start;
-                        inner[src_start..src_end]
-                            .copy_from_slice(&to_as_bytes[0..SIZE - dst_start]);
-                        break;
-                    }
-                }
-            }
-
-            if dst_end <= SIZE {
-                src_end = self.len;
-                dst_end = dst_start + src_end - src_start;
-                if dst_end <= SIZE {
-                    inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
                 } else {
-                    src_end = src_start + SIZE - dst_start;
-                    dst_end = SIZE;
-                    inner[src_start..src_end].copy_from_slice(&self.inner[dst_start..dst_end]);
+                    skip -= 1;
+                    continue;
                 }
-            } else {
-                dst_end = SIZE;
             }
 
-            Self {
-                inner,
-                len: dst_end,
+            // add the remaining bytes, the last frame, only if it remains some space
+            if len < SIZE && skip == 0 {
+                let remaining_slots = SIZE - len;
+                let remaining_bytes = &self.inner[self.len - from.len() + 1..self.len];
+                let remaining_bytes = if remaining_slots > remaining_bytes.len() {
+                    remaining_bytes
+                } else {
+                    &remaining_bytes[..remaining_slots]
+                };
+                inner[len..len + remaining_bytes.len()].copy_from_slice(remaining_bytes);
+                len += remaining_bytes.len();
             }
+
+            Self { inner, len }
         }
     }
 
@@ -1315,6 +1303,12 @@ mod tests {
     }
 
     #[test]
+    fn replace_an_str_at_the_end_of_a_rocstr_should_be_the_rocstr_with_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        assert_eq!(RocStr::<16>::from("this is new"), s.replace("old", "new"));
+    }
+
+    #[test]
     fn replace_an_str_in_a_rocstr_should_be_the_rocstr_with_str_replaced() {
         let s = RocStr::<16>::from("this is old");
         assert_eq!(RocStr::<16>::from("than an old"), s.replace("is", "an"));
@@ -1331,6 +1325,32 @@ mod tests {
         );
 
         assert_eq!(RocStr::<16>::from("this is obvously"), replaced);
+    }
+
+    #[test]
+    fn replace_an_str_inside_a_rocstr_that_overflow_should_be_the_truncated_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        let replaced = s.replace("is", "is obvously");
+
+        assert!(
+            replaced.len <= replaced.capacity(),
+            "Len of replaced rocstr is greater than its capacity"
+        );
+
+        assert_eq!(RocStr::<16>::from("this obvously is"), replaced);
+    }
+
+    #[test]
+    fn replace_an_str_inside_a_rocstr_that_overflow_at_last_should_be_the_truncated_str_replaced() {
+        let s = RocStr::<16>::from("this is old");
+        let replaced = s.replace(" is", " is obvously");
+
+        assert!(
+            replaced.len <= replaced.capacity(),
+            "Len of replaced rocstr is greater than its capacity"
+        );
+
+        assert_eq!(RocStr::<16>::from("this is obvously is"), replaced);
     }
 
     #[test]
