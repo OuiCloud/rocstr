@@ -13,7 +13,7 @@ use core::ops::Neg;
 use core::ops::Sub;
 use core::str::from_utf8;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialOrd, Ord)]
 pub struct RocStr<const SIZE: usize> {
     inner: [u8; SIZE],
     len: usize,
@@ -278,8 +278,6 @@ impl<const SIZE: usize> Display for RocStr<SIZE> {
         write!(f, "{}", Into::<&str>::into(self))
     }
 }
-
-impl<const SIZE: usize> Eq for RocStr<SIZE> {}
 
 // Ideally, the signature should be
 //     `fn from(value: T) -> Self where T: AsRef<str>`
