@@ -341,7 +341,7 @@ where
     #[must_use]
     fn eq(&self, other: &T) -> bool {
         let other = other.as_ref();
-        self.len == other.len() && &self.inner[..self.len] == other.as_bytes()
+        self.eq(other)
     }
 }
 
@@ -859,6 +859,25 @@ impl From<isize> for RocStr<20> {
     }
 }
 
+#[cfg(feature = "std")]
+extern crate std;
+
+use std::string::String;
+
+impl<const SIZE: usize> From<&String> for RocStr<SIZE> {
+    #[inline]
+    #[must_use]
+    fn from(value: &String) -> Self {
+        Self::from(value.as_str())
+    }
+}
+
+impl<const SIZE: usize> PartialEq<RocStr<SIZE>> for String {
+    fn eq(&self, other: &RocStr<SIZE>) -> bool {
+        self.eq(other.as_str())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1357,5 +1376,12 @@ mod tests {
 
         /* second byte of `老`is not utf-8 boundary */
         assert_eq!(s.truncate(8), "Löwe ");
+    }
+
+    #[test]
+    fn rocstr_from_string_with_size_greater_than_string_len_should_be_the_string() {
+        let s = String::from("This is a short enough string");
+
+        assert_eq!(s, RocStr::<32>::from(&s));
     }
 }
