@@ -1,6 +1,6 @@
 [package]
 name          = "rocstr"
-version       = "0.6.1"
+version       = "0.6.2"
 edition       = "2021"
 rust-version  = "1.60"
 description   = "An immutable fixed capacity stack based generic copy string"
@@ -35,8 +35,8 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 bytes          = { version = "1.10", optional = true, default-features = false }
-postgres-types = { version = "0.2", optional = true, default_features = false }
-serde          = { version = "1.0", optional = true, default_features = false, features = ["derive"] }
+postgres-types = { version = "0.2", optional = true, default-features = false }
+serde          = { version = "1.0", optional = true, default-features = false, features = ["derive"] }
 
 [dev-dependencies]
 arrayvec         = { version = "0.7" }
@@ -50,7 +50,7 @@ toml             = { version = "0.8" }
 
 [features]
 default  = []
-std      = []
+std      = ["serde/std"]
 postgres = ["bytes", "postgres-types", "std"]
 
 [[bench]]
