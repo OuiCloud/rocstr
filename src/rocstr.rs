@@ -341,7 +341,7 @@ where
     #[must_use]
     fn eq(&self, other: &T) -> bool {
         let other = other.as_ref();
-        self.len == other.len() && &self.inner[..self.len] == other.as_bytes()
+        self.eq(other)
     }
 }
 
@@ -635,6 +635,12 @@ impl Zero for i64 {
     }
 }
 
+impl Zero for i128 {
+    fn zero() -> Self {
+        0
+    }
+}
+
 impl Zero for isize {
     fn zero() -> Self {
         0
@@ -701,6 +707,12 @@ impl Ten for i64 {
     }
 }
 
+impl Ten for i128 {
+    fn ten() -> Self {
+        10
+    }
+}
+
 impl Ten for isize {
     fn ten() -> Self {
         10
@@ -762,6 +774,12 @@ impl AsDigit for i32 {
 }
 
 impl AsDigit for i64 {
+    fn as_digit(&self) -> u8 {
+        *self as u8
+    }
+}
+
+impl AsDigit for i128 {
     fn as_digit(&self) -> u8 {
         *self as u8
     }
@@ -849,12 +867,53 @@ impl From<i64> for RocStr<20> {
     }
 }
 
+impl From<i128> for RocStr<40> {
+    fn from(value: i128) -> Self {
+        if value == i128::MIN {
+            RocStr::from("-170141183460469231731687303715884105728")
+        } else {
+            from_signed(value)
+        }
+    }
+}
+
 impl From<isize> for RocStr<20> {
     fn from(value: isize) -> Self {
         if value == isize::MIN {
             ROCSTR_MIN_ISIZE
         } else {
             from_signed(value)
+        }
+    }
+}
+
+#[cfg(feature = "std")]
+mod standard_rocstr {
+    extern crate std;
+
+    use super::RocStr;
+
+    use std::string::String;
+
+    impl<const SIZE: usize> From<String> for RocStr<SIZE> {
+        #[inline]
+        #[must_use]
+        fn from(value: String) -> Self {
+            Self::from(value.as_str())
+        }
+    }
+
+    impl<const SIZE: usize> From<&String> for RocStr<SIZE> {
+        #[inline]
+        #[must_use]
+        fn from(value: &String) -> Self {
+            Self::from(value.as_str())
+        }
+    }
+
+    impl<const SIZE: usize> PartialEq<RocStr<SIZE>> for String {
+        fn eq(&self, other: &RocStr<SIZE>) -> bool {
+            self.eq(other.as_str())
         }
     }
 }
@@ -1099,6 +1158,14 @@ mod tests {
     }
 
     #[test]
+    fn convert_max_i128_to_rocstr_should_be_max_i128_as_str() {
+        let expected = "170141183460469231731687303715884105727";
+        let converted = RocStr::from(i128::MAX);
+
+        assert_eq!(converted, expected);
+    }
+
+    #[test]
     fn convert_max_isize_to_rocstr_should_be_max_isize_as_str() {
         let expected = "9223372036854775807";
         let converted = RocStr::from(isize::MAX);
@@ -1182,6 +1249,22 @@ mod tests {
     fn convert_min_i64_to_rocstr_should_be_min_i64_as_str() {
         let expected = "-9223372036854775808";
         let converted = RocStr::from(i64::MIN);
+
+        assert_eq!(converted, expected);
+    }
+
+    #[test]
+    fn convert_min_i128_to_rocstr_should_be_min_i128_as_str() {
+        let expected = "-170141183460469231731687303715884105728";
+        let converted = RocStr::from(i128::MIN);
+
+        assert_eq!(converted, expected);
+    }
+
+    #[test]
+    fn convert_min_i128_plus_one_to_rocstr_should_be_min_i128_plus_one_as_str() {
+        let expected = "-170141183460469231731687303715884105727";
+        let converted = RocStr::from(i128::MIN + 1);
 
         assert_eq!(converted, expected);
     }
@@ -1357,5 +1440,21 @@ mod tests {
 
         /* second byte of `老`is not utf-8 boundary */
         assert_eq!(s.truncate(8), "Löwe ");
+    }
+
+    #[cfg(feature = "std")]
+    mod standard_rocstr {
+        extern crate std;
+
+        use std::string::String;
+
+        use super::RocStr;
+
+        #[test]
+        fn rocstr_from_string_with_size_greater_than_string_len_should_be_the_string() {
+            let s = String::from("This is a short enough string");
+
+            assert_eq!(s, RocStr::<32>::from(&s));
+        }
     }
 }
