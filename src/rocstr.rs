@@ -867,9 +867,13 @@ impl From<i64> for RocStr<20> {
     }
 }
 
-impl From<i128> for RocStr<39> {
+impl From<i128> for RocStr<40> {
     fn from(value: i128) -> Self {
-        from_signed(value)
+        if value == i128::MIN {
+            RocStr::from("-170141183460469231731687303715884105728")
+        } else {
+            from_signed(value)
+        }
     }
 }
 
@@ -1258,6 +1262,14 @@ mod tests {
     }
 
     #[test]
+    fn convert_min_i128_plus_one_to_rocstr_should_be_min_i128_plus_one_as_str() {
+        let expected = "-170141183460469231731687303715884105727";
+        let converted = RocStr::from(i128::MIN + 1);
+
+        assert_eq!(converted, expected);
+    }
+
+    #[test]
     fn convert_min_isize_to_rocstr_should_be_min_isize_as_str() {
         let expected = "-9223372036854775808";
         let converted = RocStr::from(isize::MIN);
@@ -1430,14 +1442,19 @@ mod tests {
         assert_eq!(s.truncate(8), "Löwe ");
     }
 
-    #[test]
-    fn rocstr_from_string_with_size_greater_than_string_len_should_be_the_string() {
+    #[cfg(feature = "std")]
+    mod standard_rocstr {
         extern crate std;
 
         use std::string::String;
 
-        let s = String::from("This is a short enough string");
+        use super::RocStr;
 
-        assert_eq!(s, RocStr::<32>::from(&s));
+        #[test]
+        fn rocstr_from_string_with_size_greater_than_string_len_should_be_the_string() {
+            let s = String::from("This is a short enough string");
+
+            assert_eq!(s, RocStr::<32>::from(&s));
+        }
     }
 }
